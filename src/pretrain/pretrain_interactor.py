@@ -62,6 +62,8 @@ class PretrainInteractor:
             elif "SSS_embedding" in name:
                 SSS_embedding_params += [para]
                 para.requires_grad = True
+            else:
+                raise ValueError("Unknown parameter name: {}".format(name))
 
             # If the parameter requires gradients
             if para.requires_grad:

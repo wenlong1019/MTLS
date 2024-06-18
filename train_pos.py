@@ -101,14 +101,16 @@ if __name__ == "__main__":
     # ["Arabic-PADT", "Basque-BDT", "Chinese-GSD", "Coptic-Scriptorium", "English-EWT", 
     # "Estonian-EDT", "Greek-GDT", "Hindi-HDTB", "Japanese-GSD", "Korean-GSD", 
     # "Maltese-MUDT",  "Persian-PerDT", "Tamil-TTB", "Turkish-BOUN", "Vietnamese-VTB"]
-    for dataset in ["try"]:
+    for dataset in ["Arabic-PADT", "Basque-BDT", "Chinese-GSD", "Coptic-Scriptorium", "English-EWT",
+                    "Estonian-EDT", "Greek-GDT", "Hindi-HDTB", "Japanese-GSD", "Korean-GSD",
+                    "Maltese-MUDT",  "Persian-PerDT", "Tamil-TTB", "Turkish-BOUN", "Vietnamese-VTB"]:
         # Model file
         model_name = "bert-base-cased"  # "bert-base-cased" or "roberta-base"
         model_path = "./model/{}".format(model_name)
         args.model_name_or_path = model_path
 
         args.SSS_embedding_load = "./experiments/pretrain/try/{}/pretrain_best_model.save".format(model_name)
-        # args.load = "./experiments/{}/{}/{}/best_model.save".format(args.task, dataset, model_name)
+        # args.load = "./experiments/{}/{}/best_model.save".format(args.task, dataset)
 
         # Experiment files
         setup = "{}-{}".format(args.task, dataset)

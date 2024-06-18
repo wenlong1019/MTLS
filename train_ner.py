@@ -100,7 +100,8 @@ if __name__ == "__main__":
 
     # ["ar", "bg", "cs", "el", "en", "fa", "fr",  "ja", 
     # "ko", "ru",  "ta", "tr", "ur", "vi", "zh"]
-    for dataset in ["try"]:
+    for dataset in ["ar", "bg", "cs", "el", "en", "fa", "fr",  "ja",
+                    "ko", "ru",  "ta", "tr", "ur", "vi", "zh"]:
         # Model file
         model_name = "bert-base-cased"  # "bert-base-cased" or "roberta-base"
         model_path = "./model/{}".format(model_name)

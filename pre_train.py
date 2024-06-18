@@ -69,7 +69,7 @@ def run_task(args):
     # Initialize model
     model = PretrainInteractor(args)
     if args.do_load:
-        model.load(args.load)
+        model.load(args.load, load_all=True)
 
     # Pre-train
     print("#" * 50)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         model_name = "bert-base-cased"  # "bert-base-cased" or "roberta-base"
         model_path = "./model/{}".format(model_name)
         args.model_name_or_path = model_path
-        # args.load = "./experiments/{}/{}/{}/best_model.save".format(args.task, dataset, model_name)
+        # args.load = "./experiments/{}/{}/{}/pretrain_best_model.save".format(args.task, dataset, model_name)
 
         # Experiment files
         setup = "{}-{}".format(args.task, dataset)
