@@ -1,0 +1,13 @@
+pandas~=2.0.1
+tqdm~=4.65.0
+
+seqeval~=1.2.2
+filelock~=3.9.0
+transformers~=4.17.0
+numpy~=1.24.1
+torchvision~=0.15.1+cu118
+cairo~=1.16.0
+pygobject~=3.44.1
+manimpango~=0.4.3
+fonttools~=4.39.3
+pillow~=9.3.0
