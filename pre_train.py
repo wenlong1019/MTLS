@@ -15,8 +15,8 @@ def get_args(forced_args=None):
     # Model hyperparameters
     parser.add_argument("--task", type=str, default="pretrain")
     parser.add_argument("--do_load", type=bool, default=False)
-    parser.add_argument("--batch_size", type=int, default=64)
-    parser.add_argument("--step", type=int, default=1)
+    parser.add_argument("--batch_size", type=int, default=128)
+    parser.add_argument("--step", type=int, default=30000)
     parser.add_argument("--embed_dim", type=int, default=768)
     parser.add_argument("--hidden_size", type=int, default=768)
     parser.add_argument("--text_max_seq_length", type=int, default=512)
@@ -33,13 +33,17 @@ def get_args(forced_args=None):
 
     # AdamW optimizer hyperparameters
     optimizer = parser.add_argument_group("Optimizer", "Set the AdamW optimizer hyperparameters")
-    optimizer.add_argument("--lr_embeddings", type=float, default=5e-5)
-    optimizer.add_argument("--lr_encoder", type=float, default=5e-5)
-    optimizer.add_argument("--lr_other", type=float, default=5e-5)
+    optimizer.add_argument("--learning_rate", type=float, default=5e-5)
     optimizer.add_argument("--beta1", type=float, default=0.9)
     optimizer.add_argument("--beta2", type=float, default=0.999)
     optimizer.add_argument("--epsilon", type=float, default=1e-8)
     optimizer.add_argument("--l2", type=float, default=0.05)
+
+    # ReduceLROnPlateau scheduler hyperparameters
+    scheduler = parser.add_argument_group("Scheduler", "Set the ReduceLROnPlateau scheduler hyperparameters")
+    scheduler.add_argument("--factor", type=float, default=0.5)
+    scheduler.add_argument("--patience", type=float, default=5)
+    scheduler.add_argument("--min_lr", type=float, default=1e-7)
 
     # Files hyperparameters
     parser.add_argument("--model_name_or_path", metavar="FILE")
@@ -69,7 +73,7 @@ def run_task(args):
 
     # Pre-train
     print("#" * 50)
-    print("#" * 16 + " pre-training！！！ " + "#" * 17)
+    print("#" * 16 + " pre-training!!! " + "#" * 17)
     print("#" * 50)
     model.pre_train()
 
@@ -77,8 +81,8 @@ def run_task(args):
 if __name__ == "__main__":
     args = get_args()
     logger = Logger(sys.stdout)
-
-    for dataset in ["try"]:
+    # "English-EWT"
+    for dataset in ["English-EWT"]:
         # Model file
         model_name = "bert-base-cased"  # "bert-base-cased" or "roberta-base"
         model_path = "./model/{}".format(model_name)

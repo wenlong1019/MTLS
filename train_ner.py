@@ -5,8 +5,8 @@ from argparse import ArgumentParser
 
 import torch
 
-from src.pos.pos_interactor import PosInteractor
-from src.utils.label_type import pos_target_label, pos_target_label_switch
+from src.ner.ner_interactor import NerInteractor
+from src.utils.label_type import ner_target_label, ner_target_label_switch
 from src.utils.logger import Logger
 
 
@@ -14,7 +14,7 @@ def get_args(forced_args=None):
     parser = ArgumentParser()
 
     # Model hyperparameters
-    parser.add_argument("--task", type=str, default="pos")
+    parser.add_argument("--task", type=str, default="ner")
     parser.add_argument("--do_load", type=bool, default=False)
     parser.add_argument("--batch_size", type=int, default=64)
     parser.add_argument("--step", type=int, default=15000)
@@ -70,11 +70,11 @@ def run_task(args):
     if not args.output_dir.endswith("/"):
         args.output_dir += "/"
 
-    args.target_label = pos_target_label
-    args.target_label_switch = pos_target_label_switch
+    args.target_label = ner_target_label
+    args.target_label_switch = ner_target_label_switch
 
     # Initialize model
-    model = PosInteractor(args)
+    model = NerInteractor(args)
 
     if args.do_load:
         model.load(args.load)
@@ -98,9 +98,8 @@ if __name__ == "__main__":
     args = get_args()
     logger = Logger(sys.stdout)
 
-    # ["Arabic-PADT", "Basque-BDT", "Chinese-GSD", "Coptic-Scriptorium", "English-EWT", 
-    # "Estonian-EDT", "Greek-GDT", "Hindi-HDTB", "Japanese-GSD", "Korean-GSD", 
-    # "Maltese-MUDT",  "Persian-PerDT", "Tamil-TTB", "Turkish-BOUN", "Vietnamese-VTB"]
+    # ["ar", "bg", "cs", "el", "en", "fa", "fr",  "ja", 
+    # "ko", "ru",  "ta", "tr", "ur", "vi", "zh"]
     for dataset in ["try"]:
         # Model file
         model_name = "bert-base-cased"  # "bert-base-cased" or "roberta-base"
@@ -108,14 +107,14 @@ if __name__ == "__main__":
         args.model_name_or_path = model_path
 
         args.SSS_embedding_load = "./experiments/pretrain/try/{}/pretrain_best_model.save".format(model_name)
-        # args.load = "./experiments/{}/{}/{}/best_model.save".format(args.task, dataset, model_name)
+        # args.load = "./experiments/{}/{}/{}/best_model.save".format(args.task, dataset, model_name)\
 
         # Experiment files
         setup = "{}-{}".format(args.task, dataset)
-        args.data_dir = "./datasets/POS/ud-treebanks/{}".format(dataset)
-        args.train_file = "./datasets/POS/ud-treebanks/{}/train".format(dataset)
-        args.val_file = "./datasets/POS/ud-treebanks/{}/dev".format(dataset)
-        args.test_file = "./datasets/POS/ud-treebanks/{}/test".format(dataset)
+        args.data_dir = "./datasets/NER/wikiann/{}".format(dataset)
+        args.train_file = "./datasets/NER/wikiann/{}/train".format(dataset)
+        args.val_file = "./datasets/NER/wikiann/{}/dev".format(dataset)
+        args.test_file = "./datasets/NER/wikiann/{}/test".format(dataset)
         args.output_dir = "./experiments/{}/{}".format(args.task, dataset)
 
         # Logger set
