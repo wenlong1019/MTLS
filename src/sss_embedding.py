@@ -70,11 +70,9 @@ class SelectiveEmbedding(nn.Module):
         # Calculate the router logits
         router_logits = self.gate(hidden_states)
         # Calculate the routing weights using softmax
-        routing_weights = F.softmax(router_logits, dim=1, dtype=torch.float)
+        router_logits = F.softmax(router_logits, dim=1, dtype=torch.float)
         # Get the top k experts based on the routing weights
-        routing_weights, selected_experts = torch.topk(routing_weights, self.k, dim=-1)
-        # Normalize the routing weights
-        routing_weights /= routing_weights.sum(dim=-1, keepdim=True)
+        selected_weights, selected_experts = torch.topk(router_logits, self.k, dim=-1)
 
         # Experts
         E_bias = torch.zeros((batch_size * seq_length, embed_dim), dtype=hidden_states.dtype,
@@ -99,9 +97,9 @@ class SelectiveEmbedding(nn.Module):
 
             # Calculate the hidden state for this expert
             current_hidden_states = torch.matmul(current_state, expert_layer.weight.data.cuda())
-
+            expert_out = router_logits[id_x, expert_idx].unsqueeze(1) * current_hidden_states
             # Add the hidden state to the bias_embeddings tensor
-            E_bias.index_add_(0, id_x, current_hidden_states.to(hidden_states.dtype))
+            E_bias.index_add_(0, id_x, expert_out.to(hidden_states.dtype))
 
         E_bias = E_bias.reshape(batch_size, seq_length, embed_dim)
         return E_bias
