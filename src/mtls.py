@@ -82,7 +82,7 @@ def prefix_alignment(output, seq_lengths, word_starts):
         for index, word_ind in enumerate(word_starts[b]):
             # If the index is less than the maximum length and the word index is also less than the maximum length,
             # copy the output at the word index to the output alignment
-            if index < max_lengths and word_ind < max_lengths:
+            if index < max_lengths and word_ind < output.shape[1]:
                 output_alignment[b, index, :] = output[b, word_ind, :]
     return output_alignment
 
