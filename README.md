@@ -8,7 +8,7 @@ In the field of linguistics, all languages can be considered as symbolic systems
 
 - You need to configure the appropriate datasets, models and training environments according to the README.md file in each directory of the file.
 
-- We uploaded the pre-trained MTLS-B weights file in the experiments directory.
+- We will upload the pre-trained MTLS-B weights file in Hugging Face.
 
 # Pre-train
 
