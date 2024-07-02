@@ -83,13 +83,16 @@ class ModelInteractor:
             total_params += para.numel()
             if "model_encoder" in name:
                 model_encoder_params += [para]
-                para.requires_grad = False
+                para.requires_grad = True
             elif "model_embedding" in name:
                 model_embedding_params += [para]
                 para.requires_grad = False
             elif "SSS_embedding" in name:
                 SSS_embedding_params += [para]
-                para.requires_grad = True
+                if "position_embeddings" in name:
+                    para.requires_grad = False
+                else:
+                    para.requires_grad = True
             else:
                 other_params += [para]
                 para.requires_grad = True
@@ -203,7 +206,7 @@ class ModelInteractor:
             pretrained_model_dict = {}
             for name in state["model"]:
                 # if the key contains "SSS_embedding", add it to the dictionary
-                if "SSS_embedding" in name:
+                if "SSS_embedding" in name and "position_embeddings" not in name:
                     pretrained_model_dict[name] = state["model"][name]
             # load the dictionary into the model
             self.MTLS.load_state_dict(pretrained_model_dict, strict=False)

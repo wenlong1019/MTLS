@@ -45,6 +45,7 @@ class PretrainInteractor:
         model_encoder_params = []
         model_embedding_params = []
         SSS_embedding_params = []
+        other_params = []
 
         # Initialize the total and trainable parameter counts
         total_params = 0
@@ -61,9 +62,13 @@ class PretrainInteractor:
                 para.requires_grad = False
             elif "SSS_embedding" in name:
                 SSS_embedding_params += [para]
-                para.requires_grad = True
+                if "position_embeddings" in name:
+                    para.requires_grad = False
+                else:
+                    para.requires_grad = True
             else:
-                raise ValueError("Unknown parameter name: {}".format(name))
+                other_params += [para]
+                para.requires_grad = True
 
             # If the parameter requires gradients
             if para.requires_grad:
@@ -139,7 +144,7 @@ class PretrainInteractor:
             pretrained_model_dict = {}
             for name in state["model"]:
                 # if "model_encoder" in name or "SSS_embedding" in name:
-                if "SSS_embedding" in name:
+                if "SSS_embedding" in name and "position_embeddings" not in name:
                     pretrained_model_dict[name] = state["model"][name]
             self.MTLS.load_state_dict(pretrained_model_dict, strict=False)
         else:
