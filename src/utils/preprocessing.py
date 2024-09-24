@@ -29,9 +29,9 @@ class Sentence:
         return self.text
 
     def __repr__(self):
-        return "\n".join([f"# sent_id = {self.id}"] + [f"# text = {self.text}"] + [str(t) for k, t in
-                                                                                   sorted(self.tokens_full.items(),
-                                                                                          key=lambda x: x[0])] + [""])
+        return "\n".join([f"# sent_id = {self.id}"]
+                         + [f"# text = {self.text}"]
+                         + [str(t) for k, t in sorted(self.tokens_full.items(), key=lambda x: x[0])] + [""])
 
     def __iter__(self):
         for token in self.tokens:

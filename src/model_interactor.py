@@ -140,18 +140,13 @@ class ModelInteractor:
         return loss
 
     def _run_test_batch(self, batch):
-        # Get the label scores from the MTLS model
         label_scores = self.MTLS(batch)
-        # Initialize the predictions dictionary
         predictions = {}
         # Iterate through each sample in the batch
         for i, size in enumerate(batch.seq_lengths):
             size = size.item()
-            # Get the softmax scores for the labels of the current sample
             scores = torch.nn.functional.softmax(label_scores[i, 1:size, :], dim=1).cpu()
-            # Get the predicted labels for the current sample
             prediction = torch.argmax(scores, dim=1).float()
-            # Add the prediction for the current sample to the predictions dictionary
             predictions[batch.ids[i]] = prediction
         return predictions
 
@@ -163,32 +158,24 @@ class ModelInteractor:
 
         # Iterate through the data
         for i, batch in enumerate(tqdm(data)):
-            # Move the batch to the device
             batch.to(self.device)
 
-            # Run the train batch and get the loss
             loss = self._run_train_batch(batch, self.optimizer)
 
-            # If cuda is available, empty the cache
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
 
-            # Add the loss to the total loss
             total_loss += loss
 
-        # Return the total loss
         return total_loss
 
     def predict(self, data_loader):
-        # Set the model to evaluation mode
         self.MTLS.eval()
-        # Initialize a dictionary to store predictions
         predictions = {}
         # Iterate through the data loader
         for batch in data_loader:
             batch.to(self.device)
             with torch.no_grad():
-                # Run the test batch and store the predictions
                 pred = self._run_test_batch(batch)
                 predictions.update(pred)
         return predictions

@@ -6,12 +6,12 @@ from src.model_interactor import ModelInteractor
 
 
 def calculate_accuracy(entries, predicted):
-    '''
+    """
     Calculate the accuracy of the model.
     :param entries: the entries of the dataset
     :param predicted: the predicted labels
     :return: the accuracy of the model
-    '''
+    """
     correct = 0
     all_item = 0
     for entry in entries:
@@ -76,15 +76,11 @@ class PosInteractor(ModelInteractor):
     def predict_val(self):
         # Use the trained model to predict the validation data
         predicted = self.predict(self.val_loader)
-        # Calculate the accuracy of the predictions
         acc = calculate_accuracy(self.val_data, predicted)
-        # Print the accuracy of the validation data
         print("val acc is {:.2%}".format(acc))
 
     def predict_test(self):
         # Use the trained model to predict the test data
         predicted = self.predict(self.test_loader)
-        # Calculate the accuracy of the predictions
         acc = calculate_accuracy(self.test_data, predicted)
-        # Print the accuracy of the test data
         print("test acc is {:.2%}".format(acc))

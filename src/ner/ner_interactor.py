@@ -11,7 +11,6 @@ class NerInteractor(ModelInteractor):
         super().__init__(settings)
 
     def train(self):
-        # Get the settings
         settings = self.settings
 
         # Initialize the best F1 score and the epoch with the best F1 score
@@ -21,10 +20,8 @@ class NerInteractor(ModelInteractor):
         # Set the early stopping flag to False
         early_stop = False
 
-        # Calculate the number of batches in an epoch
+        # Calculate the number of batches in an epoch and the number of epochs
         epoch_batch = len(self.train_loader)
-
-        # Calculate the number of epochs
         epochs = math.ceil(settings.step / epoch_batch)
 
         for epoch in range(1, epochs + 1):

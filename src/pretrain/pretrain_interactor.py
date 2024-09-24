@@ -70,11 +70,9 @@ class PretrainInteractor:
                 other_params += [para]
                 para.requires_grad = True
 
-            # If the parameter requires gradients
             if para.requires_grad:
                 trainable_params += para.numel()
 
-        # Print the total, trainable, and percentage of trainable parameters
         print('total params = {:e}, trainable params = {:e}, Percentage of trainable parameters = {:.4f}%'
               .format(total_params, trainable_params, trainable_params / total_params))
 
@@ -119,7 +117,6 @@ class PretrainInteractor:
 
         # Iterate through the data
         for i, batch in enumerate(tqdm(data)):
-            # Send the batch to the device
             batch.to(self.device)
             # Run the training batch and get the loss, loss distance, and loss spatial
             loss, loss_dist, loss_spat = self._run_train_batch(batch, self.optimizer)
@@ -153,13 +150,12 @@ class PretrainInteractor:
         self.MTLS = self.MTLS.to(self.settings.device)
 
     def pre_train(self):
-        # Set the settings
         settings = self.settings
-        # Print the training starting message
+
         print("Training is starting for {} steps using ".format(settings.step) +
               "{} with the following settings:".format(self.device))
         print()
-        # Print the settings
+
         for key, val in settings.__dict__.items():
             print("{}: {}".format(key, val))
         print(flush=True)
@@ -192,11 +188,9 @@ class PretrainInteractor:
                 # Change the learning rate
                 self.scheduler.step(total_loss)
                 ###########################################################
-                # Check if the total loss is less than the best loss
                 improvement = total_loss < best_loss
-                # Calculate the elapsed epochs
                 elapsed = epoch - best_loss_epoch
-                # If the total loss is not less than the best loss
+
                 if not improvement:
                     print("Have not seen any improvement for {} epochs".format(elapsed))
                     print("Best loss was {:.4f} seen at epoch #{}".format(best_loss, best_loss_epoch))

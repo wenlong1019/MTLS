@@ -34,9 +34,9 @@ def get_args(forced_args=None):
 
     # AdamW optimizer hyperparameters
     optimizer = parser.add_argument_group("Optimizer", "Set the AdamW optimizer hyperparameters")
-    optimizer.add_argument("--lr_embeddings", type=float, default=2e-5)
-    optimizer.add_argument("--lr_encoder", type=float, default=2e-5)
-    optimizer.add_argument("--lr_other", type=float, default=2e-5)
+    optimizer.add_argument("--lr_embeddings", type=float, default=5e-5)
+    optimizer.add_argument("--lr_encoder", type=float, default=5e-5)
+    optimizer.add_argument("--lr_other", type=float, default=5e-5)
     optimizer.add_argument("--beta1", type=float, default=0.9)
     optimizer.add_argument("--beta2", type=float, default=0.999)
     optimizer.add_argument("--epsilon", type=float, default=1e-8)
@@ -109,7 +109,7 @@ if __name__ == "__main__":
         model_path = "./model/{}".format(model_name)
         args.model_name_or_path = model_path
 
-        args.SSS_embedding_load = "./experiments/pretrain/try/{}/pretrain_best_model.save".format(model_name)
+        args.SSS_embedding_load = "./experiments/pretrain/English-EWT/{}/pretrain_best_model.save".format(model_name)
         # args.load = "./experiments/{}/{}/best_model.save".format(args.task, dataset)
 
         # Experiment files

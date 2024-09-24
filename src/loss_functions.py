@@ -3,9 +3,7 @@ import torch.nn.functional as F
 
 
 def dist_similarity(textual_output, visual_output):
-    # Apply log_softmax to the visual_output
     visual_output = F.log_softmax(visual_output, dim=-1)
-    # Apply softmax to the textual_output
     textual_output = F.softmax(textual_output, dim=-1)
     # Calculate the KL divergence between the visual_output and textual_output
     similarity = F.kl_div(visual_output, textual_output, reduction='sum')
@@ -37,9 +35,7 @@ def normalize(*xs):
 
 
 def cross_entropy_loss(label_scores, batch):
-    # Create a mask matrix to indicate the valid positions in the target sequence
     mask_matrix = torch.zeros([len(batch.seq_lengths), batch.seq_lengths[0]]).bool()
-    # Get the targets from the batch
     targets = list(batch.targets)
     for b in range(len(batch.seq_lengths)):
         # Set the mask matrix to True from the 1st to the actual length of the target sequence

@@ -57,8 +57,7 @@ class MTLS(nn.Module):
         else:
             # Get the extended attention mask
             extended_attention_mask = get_extended_attention_mask(symb_attention_mask,
-                                                                  symb_attention_mask.size(),
-                                                                  symb_values.device)
+                                                                  symb_attention_mask.size())
             # Set the head mask
             head_mask = [None] * self.model_config.num_hidden_layers
             # Run the model encoder
@@ -102,7 +101,7 @@ def get_token(output, seq_lengths, word_starts):
 
 
 # Function to get the extended attention mask
-def get_extended_attention_mask(attention_mask, input_shape, device):
+def get_extended_attention_mask(attention_mask, input_shape):
     if attention_mask.dim() == 3:
         # Convert the attention_mask to the extended attention mask
         extended_attention_mask = attention_mask[:, None, :, :]
